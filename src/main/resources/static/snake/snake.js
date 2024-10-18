@@ -27,10 +27,7 @@ window.onload = function () {
 
 // ----------------- main operations -----------------
 function initialize() {
-    board = document.getElementById("board");
-    board.height = BOARD_HEIGHT * BLOCKSIZE;
-    board.width = BOARD_WIDTH * BLOCKSIZE;
-    background = board.getContext("2d");
+    initializeBoard();
 
     sessionStorage.setItem("gameOver", "false");
 
@@ -57,8 +54,6 @@ function initialize() {
 
 // ----------------- Game Frame -----------------
 
-
-
 function loadFrame(){
     if (sessionStorage.getItem("gameOver") === "true" ) {
         return;
@@ -78,7 +73,14 @@ function loadFrame(){
 }
 
 
-// -------------------------------------------------
+// ----------------- Board -----------------
+function initializeBoard() {
+    board = document.getElementById("board");
+    board.height = BOARD_HEIGHT * BLOCKSIZE;
+    board.width = BOARD_WIDTH * BLOCKSIZE;
+    background = board.getContext("2d");
+}
+
 function renderBoard() {
     let food = getFoodPoint();
 
