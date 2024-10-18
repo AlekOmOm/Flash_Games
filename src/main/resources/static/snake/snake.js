@@ -12,10 +12,13 @@ var background;
 
 var snake = [];
 
+
+
 // ----------------- Game Window -----------------
 window.onload = function () {
     sessionStorage.setItem("gameStarted", "false");
     initialize();
+
 
     initializeSnake(BLOCKSIZE, BOARD_HEIGHT, BOARD_WIDTH);
 
@@ -30,15 +33,16 @@ function initialize() {
     initializeBoard();
 
     sessionStorage.setItem("gameOver", "false");
+    sessionStorage.setItem("gameStarted", "false");
 
     initializeGameButtons(
-        function() {
+        /*function() {
             initialize();
             initializeSnake(BLOCKSIZE, BOARD_HEIGHT, BOARD_WIDTH);
             sessionStorage.setItem("gameOver", "false");
             sessionStorage.setItem("gameStarted", "true");
             console.log("game start button clicked");
-        },
+        },*/
         function() {
             alert("Game paused!");
         },
@@ -50,6 +54,26 @@ function initialize() {
             console.log("game restart button clicked");
         }
     );
+    initializeUserInput();
+}
+
+function initializeUserInput() {
+    document.addEventListener("keyup", function (event) {
+        setDirection(processUserInput(event, {
+            "ArrowUp": 1,
+            "ArrowRight": 2,
+            "ArrowDown": 3,
+            "ArrowLeft": 4
+        }));
+    });
+    document.addEventListener("keyup", function (event) {
+        setDirection(processUserInput(event, {
+            "w": 1,
+            "d": 2,
+            "s": 3,
+            "a": 4
+        }));
+    });
 }
 
 // ----------------- Game Frame -----------------

@@ -5,22 +5,14 @@ export var snakeX = 20*20;
 export var snakeY = 20*20;
 var foodX, foodY;
 
-export let snake, direction, blocksize, BOARD_HEIGHT, BOARD_WIDTH;
+export let snake, direction, BLOCKSIZE, BOARD_HEIGHT, BOARD_WIDTH;
 
 
 
 // ----------------- main operations -----------------
 
 export function initializeSnake(blocksizePrm, board_heightPrm, board_widthPrm) {
-    document.addEventListener("keyup", function (event) {
-        setDirection(processUserInput(event, {
-            "ArrowUp": 1,
-            "ArrowRight": 2,
-            "ArrowDown": 3,
-            "ArrowLeft": 4
-        }));
-    });
-    blocksize = blocksizePrm;
+    BLOCKSIZE = blocksizePrm;
     BOARD_HEIGHT = board_heightPrm;
     BOARD_WIDTH = board_widthPrm;
 
@@ -57,18 +49,20 @@ export function updateSnake(snake) {
 
 export function updateSnakeXY(dirNr) {
     if (dirNr === 1) { // up
-        snakeY-=blocksize;
+        snakeY-=BLOCKSIZE;
     } else if (dirNr === 2) { // right
-        snakeX+=blocksize;
+        snakeX+=BLOCKSIZE;
     } else if (dirNr === 3) { // down
-        snakeY+=blocksize;
+        snakeY+=BLOCKSIZE;
     } else if (dirNr === 4) { // left
-        snakeX-=blocksize;
+        snakeX-=BLOCKSIZE;
     }
 }
 
 // ----------------- Direction -----------------
-export function setDirection(nr) {
+export function setDirection(input) {
+    nr = convert(input);
+
     if (direction === nr ) {
         return;
     }
@@ -78,6 +72,25 @@ export function setDirection(nr) {
     }
 
     direction = nr;
+}
+
+function convert(input) {
+    let nr = 0;
+    // check for char or int (wasd or arrow keys)
+    if (typeof input === "string") {
+        if (input === "w") {
+            nr = 1;
+        } else if (input === "d") {
+            nr = 2;
+        } else if (input === "s") {
+            nr = 3;
+        } else if (input === "a") {
+            nr = 4;
+        }
+    } else {
+        nr = input;
+    }
+    return nr;
 }
 
 export function oppositeDirection(nr) {
@@ -93,6 +106,7 @@ export function getFoodPoint() {
     }
     return [foodX, foodY];
 }
+
 export function setFoodPoint() {
     do {
         foodX = getRandomPoint();
@@ -106,5 +120,5 @@ export function foodIsEaten() {
 
 
 function getRandomPoint() {
-    return Math.floor(Math.random() * BOARD_HEIGHT) * blocksize;
+    return Math.floor(Math.random() * BOARD_HEIGHT) * BLOCKSIZE;
 }
