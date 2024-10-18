@@ -21,9 +21,8 @@ window.onload = function () {
 
     loadFrame();
 
-    if (sessionStorage.getItem("gameStarted") === "true") {
-        setInterval(loadFrame, 1000 / 10);
-    }
+    setInterval(loadFrame, 1000 / 10);
+
 }
 
 // ----------------- main operations -----------------

@@ -5,22 +5,25 @@ var score = document.getElementById("score");
 
 
 export function renderScoreBoard(currentScore) {
+    let highscore = document.getElementById("highscore");
     let highScoreSession = sessionStorage.getItem("highscore");
 
-    if (highScoreSession != null) {
-        if (currentScore > highScoreSession) {
-            sessionStorage.setItem("highscore", currentScore);
-            // set highscore color to red
-            highscore.style.color = "red";
-            message(highscore, "New Highscore!", "red", "red", 3000);
-        } else {
-            highscore.textContent = ""+highScoreSession;
-            highscore.style.color = "black";
-        }
-    } else { // -> no highscore in
-        sessionStorage.setItem("highscore", currentScore);
-        message(highscore, "New Highscore!", "red", "red", 3000);
+    if (highscore == null && highScoreSession == null) {
+        highscore = 0;
     }
+
+
+    if (currentScore > highScoreSession) {
+        sessionStorage.setItem("highscore", currentScore);
+        // set highscore color to red
+        highscore.style.color = "red";
+        message(highscore, "New Highscore!", "red", "red", 3000);
+    } else {
+        highscore.textContent = ""+highScoreSession;
+        highscore.style.color = "black";
+    }
+
+
 
     score.textContent = ""+currentScore;
 }
