@@ -1,4 +1,38 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 body {
+    margin-top: 5vh;
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
+}
+
+.info {
+    margin-top: 1vh;
+
+    display: flex;
+
+    justify-content: center;
+    flex-direction: column;
+}
+
+.game-buttons {
+    padding: 1vh;
+}
+
+
+.highscore-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#reset-highscore-button {
+    position: relative;
+    right: -1vh;
+    width: 1.75vh;
 }
