@@ -21,8 +21,8 @@ window.onload = function () {
 
     loadFrame();
 
+    // TODO: start interval, when game starts, keep it at initial state until game starts
     setInterval(loadFrame, 1000 / 10);
-
 }
 
 // ----------------- main operations -----------------
