@@ -22,13 +22,13 @@ export function initializeSnake(blocksizePrm, board_heightPrm, board_widthPrm) {
     setFoodPoint();
 }
 
-export function load(snake) {
+export function loadSnake() {
     updateSnakeXY(direction);
-    return updateSnake(snake);
+    updateSnake();
 }
 
 // ----------------- Snake -----------------
-export function updateSnake(snake) {
+export function updateSnake() {
     if (snake.length === 0) {
         snake.push([getRandomPoint(),getRandomPoint()]);
     }
@@ -44,7 +44,7 @@ export function updateSnake(snake) {
         snake_updated.pop();
     }
 
-    return snake_updated;
+    snake = snake_updated;
 }
 
 export function updateSnakeXY(dirNr) {
@@ -59,10 +59,12 @@ export function updateSnakeXY(dirNr) {
     }
 }
 
-// ----------------- Direction -----------------
-export function setDirection(input) {
-    nr = convert(input);
+export function getSnake() {
+    return snake;
+}
 
+// ----------------- Direction -----------------
+export function setDirection(nr) {
     if (direction === nr ) {
         return;
     }
@@ -71,26 +73,11 @@ export function setDirection(input) {
         return;
     }
 
-    direction = nr;
-}
+    console.log(" ");
+    console.log("change of direction: " + direction + " -> " + nr);
+    console.log(" - from: " + getMovement(direction) + " -> " + getMovement(nr));
 
-function convert(input) {
-    let nr = 0;
-    // check for char or int (wasd or arrow keys)
-    if (typeof input === "string") {
-        if (input === "w") {
-            nr = 1;
-        } else if (input === "d") {
-            nr = 2;
-        } else if (input === "s") {
-            nr = 3;
-        } else if (input === "a") {
-            nr = 4;
-        }
-    } else {
-        nr = input;
-    }
-    return nr;
+    direction = nr;
 }
 
 export function oppositeDirection(nr) {
@@ -121,4 +108,19 @@ export function foodIsEaten() {
 
 function getRandomPoint() {
     return Math.floor(Math.random() * BOARD_HEIGHT) * BLOCKSIZE;
+}
+
+
+function getMovement(nr) {
+    let dirMovement = "";
+    if (nr === 1) {
+        dirMovement = "up";
+    } else if (nr === 2) {
+        dirMovement = "right";
+    } else if (nr === 3) {
+        dirMovement = "down";
+    } else if (nr === 4) {
+        dirMovement = "left";
+    }
+    return dirMovement;
 }

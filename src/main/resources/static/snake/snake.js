@@ -1,4 +1,14 @@
-import { initializeSnake, load, updateSnake, updateSnakeXY, setDirection, snakeX, snakeY, getFoodPoint} from "./snakeLogic.js";
+import {
+    initializeSnake,
+    loadSnake,
+    updateSnake,
+    updateSnakeXY,
+    setDirection,
+    snakeX,
+    snakeY,
+    getFoodPoint,
+    getSnake,
+} from "./snakeLogic.js";
 import { renderScoreBoard } from "../scoreBoard.js";
 import { initializeGameButtons } from "../gameButtons.js";
 import { gameOver } from "../alertMessage.js";
@@ -10,22 +20,29 @@ const BOARD_WIDTH = 35;
 var board;
 var background;
 
-var snake = [];
-
-
-
 // ----------------- Game Window -----------------
 window.onload = function () {
     sessionStorage.setItem("gameStarted", "false");
     initialize();
-
 
     initializeSnake(BLOCKSIZE, BOARD_HEIGHT, BOARD_WIDTH);
 
     loadFrame();
 
     // TODO: start interval, when game starts, keep it at initial state until game starts
+    if (sessionStorage.getItem("gameOver") === "true" ) {
+        clearInterval(loadFrame);
+    }
+
     setInterval(loadFrame, 1000 / 10);
+}
+
+function restart() {
+    initialize();
+    initializeSnake(BLOCKSIZE, BOARD_HEIGHT, BOARD_WIDTH);
+    sessionStorage.setItem("gameOver", "false");
+    sessionStorage.setItem("gameStarted", "true");
+    console.log("game start button clicked");
 }
 
 // ----------------- main operations -----------------
@@ -47,27 +64,19 @@ function initialize() {
             alert("Game paused!");
         },
         function() {
-            initialize();
-            initializeSnake(BLOCKSIZE, BOARD_HEIGHT, BOARD_WIDTH);
-            sessionStorage.setItem("gameOver", "false");
-            sessionStorage.setItem("gameStarted", "true");
-            console.log("game restart button clicked");
+            restart();
         }
     );
     initializeUserInput();
 }
 
 function initializeUserInput() {
-    document.addEventListener("keyup", function (event) {
+    document.addEventListener("keydown", function (event) {
         setDirection(processUserInput(event, {
             "ArrowUp": 1,
             "ArrowRight": 2,
             "ArrowDown": 3,
-            "ArrowLeft": 4
-        }));
-    });
-    document.addEventListener("keyup", function (event) {
-        setDirection(processUserInput(event, {
+            "ArrowLeft": 4,
             "w": 1,
             "d": 2,
             "s": 3,
@@ -79,21 +88,17 @@ function initializeUserInput() {
 // ----------------- Game Frame -----------------
 
 function loadFrame(){
-    if (sessionStorage.getItem("gameOver") === "true" ) {
+    loadSnake();
+
+    if (gameOver(getSnake(), BOARD_WIDTH, BOARD_HEIGHT)) {
         return;
     }
 
-    snake = load(snake);
-
-    if (gameOver(snake, board)) {
-        return;
-    }
-
-    console.log("snake: ("+snakeX+",", snakeY+")");
+    console.log("snake: ("+snakeLoaded[0][0]+",", snakeLoaded[0][1]+")");
 
     renderBoard();
 
-    renderScoreBoard(snake.length);
+    renderScoreBoard(getSnake().length-1);
 }
 
 
@@ -107,6 +112,10 @@ function initializeBoard() {
 
 function renderBoard() {
     let food = getFoodPoint();
+    let snake = getSnake();
+
+    console.log("DEBUG renderBoard()");
+    console.log("snake: "+snake.length);
 
     colourBoard("black", 0, 0, board.width, board.height);
     background.fillStyle = "lime";
