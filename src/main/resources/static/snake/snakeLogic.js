@@ -20,6 +20,9 @@ export function initializeSnake(blocksizePrm, board_heightPrm, board_widthPrm) {
     snake.push([snakeX, snakeY]);
 
     setFoodPoint();
+
+
+
 }
 
 export function loadSnake() {

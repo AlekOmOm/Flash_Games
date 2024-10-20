@@ -15,14 +15,13 @@ import { gameOver } from "../alertMessage.js";
 import { processUserInput } from "../userInput.js";
 
 const BLOCKSIZE = 20;
-const BOARD_HEIGHT = 35;
+const BOARD_HEIGHT = 35; // TODO fix height and width setting to with or without "* BLOCKSIZE"
 const BOARD_WIDTH = 35;
 var board;
 var background;
 
 // ----------------- Game Window -----------------
 window.onload = function () {
-    sessionStorage.setItem("gameStarted", "false");
     initialize();
 
     initializeSnake(BLOCKSIZE, BOARD_HEIGHT, BOARD_WIDTH);
@@ -108,6 +107,11 @@ function initializeBoard() {
     board.height = BOARD_HEIGHT * BLOCKSIZE;
     board.width = BOARD_WIDTH * BLOCKSIZE;
     background = board.getContext("2d");
+
+    console.log("Debug Board");
+    console.log(" height:"+ board.height);
+    console.log(" width:"+ board.width);
+
 }
 
 function renderBoard() {
