@@ -1,4 +1,5 @@
 import {processUserInput} from "../userInput.js";
+import {getRandomPoint, setFoodPoint, foodIsEaten} from "./food.js";
 
 
 export var snakeX = 20*20;
@@ -10,6 +11,21 @@ export let snake, direction, BLOCKSIZE, BOARD_HEIGHT, BOARD_WIDTH;
 
 
 // ----------------- main operations -----------------
+
+class SnakeEntity {
+
+    userInput;
+
+    constructor() {
+        this.snake = [];
+        this.snake.push([snakeX, snakeY]);
+        this.userInput = new UserInput();
+    }
+
+
+
+}
+
 
 export function initializeSnake(blocksizePrm, board_heightPrm, board_widthPrm) {
     BLOCKSIZE = blocksizePrm;
@@ -25,6 +41,21 @@ export function initializeSnake(blocksizePrm, board_heightPrm, board_widthPrm) {
 export function loadSnake() {
     updateSnakeXY(direction);
     updateSnake();
+}
+
+function initializeUserInput() {
+    document.addEventListener("keydown", function (event) {
+        setDirection(processUserInput(event, {
+            "ArrowUp": 1,
+            "ArrowRight": 2,
+            "ArrowDown": 3,
+            "ArrowLeft": 4,
+            "w": 1,
+            "d": 2,
+            "s": 3,
+            "a": 4
+        }));
+    });
 }
 
 // ----------------- Snake -----------------
@@ -73,10 +104,6 @@ export function setDirection(nr) {
         return;
     }
 
-    console.log(" ");
-    console.log("change of direction: " + direction + " -> " + nr);
-    console.log(" - from: " + getMovement(direction) + " -> " + getMovement(nr));
-
     direction = nr;
 }
 
@@ -86,29 +113,8 @@ export function oppositeDirection(nr) {
     return check === 4 || check === 6;
 }
 
-// ----------------- Food -----------------
-export function getFoodPoint() {
-    if (foodIsEaten()) {
-        setFoodPoint();
-    }
-    return [foodX, foodY];
-}
-
-export function setFoodPoint() {
-    do {
-        foodX = getRandomPoint();
-        foodY = getRandomPoint();
-    } while (snake.some(segment => segment[0] === foodX && segment[1] === foodY));
-}
-
-export function foodIsEaten() {
-    return snakeX === foodX && snakeY === foodY;
-}
 
 
-function getRandomPoint() {
-    return Math.floor(Math.random() * BOARD_HEIGHT)*10/10;
-}
 
 
 function getMovement(nr) {
