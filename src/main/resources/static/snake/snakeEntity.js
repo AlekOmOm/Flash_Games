@@ -20,9 +20,6 @@ export function initializeSnake(blocksizePrm, board_heightPrm, board_widthPrm) {
     snake.push([snakeX, snakeY]);
 
     setFoodPoint();
-
-
-
 }
 
 export function loadSnake() {
@@ -110,7 +107,7 @@ export function foodIsEaten() {
 
 
 function getRandomPoint() {
-    return Math.floor(Math.random() * BOARD_HEIGHT) * BLOCKSIZE;
+    return Math.floor(Math.random() * BOARD_HEIGHT)*10/10;
 }
 
 
