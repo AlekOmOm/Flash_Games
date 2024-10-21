@@ -11,10 +11,9 @@ class Food {
         this.foodY = this.getRandomPoint();
     }
 
-
     getFoodPoint() {
-        if (foodIsEaten()) {
-            setFoodPoint();
+        if (this.foodIsEaten()) {
+            this.setFoodPoint();
         }
         return [this.foodX, this.foodY];
     }
@@ -27,7 +26,7 @@ class Food {
     }
 
     foodIsEaten(snakeX, snakeY) {
-        return snakeX === foodX && snakeY === foodY;
+        return snakeX === this.foodX && snakeY === this.foodY;
     }
 
 
@@ -36,6 +35,3 @@ class Food {
         return Math.floor(Math.random() * this.board.height).toFixed(0);
     }
 }
-
-// ----------------- Food -----------------
-

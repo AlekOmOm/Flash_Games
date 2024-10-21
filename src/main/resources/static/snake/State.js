@@ -24,6 +24,10 @@ class State {
 
     }
 
+    isFoodedEaten() {
+        this.food.isFoodedEaten(this.snake.snakeX, this.snake.snakeY);
+    }
+
     // ----------------- Game Over logic -----------------
     gameOver() {
 
