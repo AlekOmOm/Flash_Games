@@ -108,13 +108,20 @@ export class SnakeEntity {
         return check === 4 || check === 6;
     }
 
+    // ---
+    toStringSnake() {
+        let str = "";
+        for (let i = 0; i < this.snake.length; i++) {
+            str += "(" + this.snake[i][0] + "," + this.snake[i][1] + ")";
+        }
+        return str;
+    }
+
     getRandomPoint() {
         // get rounded random number between 0 and BOARD_HEIGHT
         return Math.floor(Math.random() * this.board.height).toFixed(0);
     }
 }
-
-
 
 // ----------------- Snake -----------------
 
