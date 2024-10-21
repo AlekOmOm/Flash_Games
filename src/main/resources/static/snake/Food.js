@@ -1,14 +1,15 @@
 
-
 // ----------------- Constants -----------------
 
-class Food {
+import {getRandomPoint} from "./SnakeGame.js";
+
+export class Food {
 
     foodX; foodY;
 
     constructor() {
-        this.foodX = this.getRandomPoint();
-        this.foodY = this.getRandomPoint();
+        this.foodX = getRandomPoint();
+        this.foodY = getRandomPoint();
     }
 
     getFoodPoint() {
@@ -22,16 +23,11 @@ class Food {
         do {
             this.foodX = getRandomPoint();
             this.foodY = getRandomPoint();
-        } while (snake.some(segment => segment[0] === foodX && segment[1] === foodY));
+        } while (snake.some(segment => segment[0] === this.foodX && segment[1] === this.foodY));
     }
 
     foodIsEaten(snakeX, snakeY) {
         return snakeX === this.foodX && snakeY === this.foodY;
     }
 
-
-    getRandomPoint() {
-        // get rounded random number between 0 and BOARD_HEIGHT
-        return Math.floor(Math.random() * this.board.height).toFixed(0);
-    }
 }

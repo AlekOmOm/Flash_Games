@@ -1,20 +1,21 @@
-import { Board } from "Board.js";
-import {getSnake, SnakeEntity} from "./SnakeEntity";
+import { Board } from "./Board.js";
+import {SnakeEntity} from "./SnakeEntity.js";
+import {Food} from "./Food.js";
 
 
-class State {
+export class State {
     snake;
     food;
     board;
 
     constructor(board) {
-        this.snake = new SnakeEntity();
+        this.snake = new SnakeEntity(board);
         this.food = new Food();
         this.board = board;
     }
 
     update() {
-        this.snake = getSnake();
+        this.snake = this.snake.update();
         this.food.load();
     }
 
@@ -25,7 +26,7 @@ class State {
     }
 
     isFoodedEaten() {
-        this.food.isFoodedEaten(this.snake.snakeX, this.snake.snakeY);
+        this.food.foodIsEaten(this.snake.snakeX, this.snake.snakeY);
     }
 
     // ----------------- Game Over logic -----------------

@@ -1,15 +1,15 @@
 
-import {SnakeGame} from "./SnakeGame"
-import {initializeGameButtons} from "../gameButtons";
-import {renderScoreBoard} from "../ScoreBoard";
+// ----------------- Game Buttons -----------------
 
+import {initializeGameButtons} from '../GameButtons.js';
+import {SnakeGame} from './SnakeGame.js';
 
+var doc = document;
 
 
 // ----------------- Game Window -----------------
-window.onload = loadBrowserWindow ();
+window.onload = function() {
 
-loadBrowserWindow() {
-    SnakeGame game = new SnakeGame()
+    let game = new SnakeGame();
     initializeGameButtons(game.pauseGame(), game.restartGame());
 }

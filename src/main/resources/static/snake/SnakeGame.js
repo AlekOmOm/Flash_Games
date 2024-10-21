@@ -1,8 +1,6 @@
 
 import { Board } from './Board.js';
 import { State } from './State.js';
-import {gameOver} from "../alertMessage";
-import {renderScoreBoard} from "../ScoreBoard";
 
 
 
@@ -11,7 +9,7 @@ const BOARD_HEIGHT = 35; // TODO fix height and width setting to with or without
 const BOARD_WIDTH = 35;
 
 
-class SnakeGame {
+export class SnakeGame {
     // gamestate -> playing, game over, paused, restarted
     // board -> board rendering
 
@@ -19,8 +17,9 @@ class SnakeGame {
     state;
 
     constructor() {
-        this.board = new Board(BOARD_HEIGHT, BOARD_WIDTH, BLOCKSIZE, document);
+        this.board = new Board(BOARD_HEIGHT, BOARD_WIDTH, BLOCKSIZE);
         this.state = new State(this.board);
+        this.board.renderBoard(this.getState());
         setFrameRate(10);
     }
 
@@ -44,6 +43,9 @@ class SnakeGame {
     restartGame() {
 
     }
+
+
+
 
     /*
     initializeBoard();
@@ -72,4 +74,9 @@ class SnakeGame {
     setInterval(loadFrame, 1000 / 10);
     */
 
+}
+
+export function getRandomPoint() {
+    // get rounded random number between 0 and BOARD_HEIGHT
+    return Math.floor(Math.random() * BOARD_HEIGHT).toFixed(0);
 }

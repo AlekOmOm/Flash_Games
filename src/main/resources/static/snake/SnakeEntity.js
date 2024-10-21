@@ -1,61 +1,53 @@
 import {processUserInput} from "../UserInput.js";
-import {getRandomPoint, setFoodPoint, foodIsEaten} from "./food.js";
-
-export let snake, direction, BLOCKSIZE, BOARD_HEIGHT, BOARD_WIDTH;
+import {getRandomPoint} from "./SnakeGame.js";
 
 
-
-// get
-
-export function getSnake(){
-    this.load();
-    return this.snake;
-}
 
 // ----------------- main operations -----------------
 
 export class SnakeEntity {
-
     snake = [];
-    userInput;
-    snakeX = this.getRandomPoint();
-    snakeY = this.getRandomPoint();
+
+    snakeX = getRandomPoint();
+    snakeY = getRandomPoint();
     body = [];
     direction = 0;
 
     constructor() {
         this.body = [];
-        this.body.push([snakeX, snakeY]);
-        this.userInput = new UserInput();
+        this.body.push([this.snakeX, this.snakeY]);
+
         this.initializeMovement();
     }
 
+
     // ----------------- main -----------------
 
-    load() {
+    load(food) { // TODO food interaction
         updatePos(direction);
-        update();
+        return update(food);
     }
 
     // ----------------- updates -----------------
 
-    update() {
+    update(food) {
         if (this.body.length === 0) {
             this.body.push([getRandomPoint(),getRandomPoint()]);
         }
 
         let snake_updated = [];
-        snake_updated.push([snakeX,snakeY]); // push head first
+        snake_updated.push([this.snakeX,this.snakeY]); // push head first
 
         for (let i = 0; i<this.body.length; i++) {
             snake_updated.push(this.body[i]);
         }
 
-        if (!foodIsEaten()) {
+        if (!(food.isFoodedEaten())) {
             snake_updated.pop();
         }
 
         this.snake = snake_updated;
+        return this.snake;
     }
 
     updatePos(dirNr) {
@@ -108,7 +100,7 @@ export class SnakeEntity {
         return check === 4 || check === 6;
     }
 
-    // ---
+    // --- helper methods ---
     toStringSnake() {
         let str = "";
         for (let i = 0; i < this.snake.length; i++) {
@@ -117,15 +109,4 @@ export class SnakeEntity {
         return str;
     }
 
-    getRandomPoint() {
-        // get rounded random number between 0 and BOARD_HEIGHT
-        return Math.floor(Math.random() * this.board.height).toFixed(0);
-    }
 }
-
-// ----------------- Snake -----------------
-
-
-
-
-
