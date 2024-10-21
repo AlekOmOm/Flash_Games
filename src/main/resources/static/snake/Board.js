@@ -1,10 +1,11 @@
 
 
 
-class Board {
-    background;
+export class Board {
+    grid;
     blocksize;
     colours = ["black", "lime", "red"];
+    document;
 
     constructor(BOARD_HEIGHT, BOARD_WIDTH, BLOCKSIZEPrm, doc) {
         this.BLOCKSIZE = BLOCKSIZEPrm;
@@ -13,25 +14,24 @@ class Board {
     }
 
     initializeBoard() {
-        this.board = document.getElementById("board");
+        this.board = this.document.getElementById("board");
         this.board.height = BOARD_HEIGHT * this.blocksize;
         this.board.width = BOARD_WIDTH * this.blocksize;
-        this.background = this.board.getContext("2d");
+        this.grid = this.board.getContext("2d");
     }
 
     renderBoard(state) {
+        // background
+        colourBoard(this.colours[0], 0, 0, this.board.width, this.board.height);
 
-        let food = state.getFoodPoint();
-        let snake = state.getSnake();
-
-        colourBoard(this.colours[0], 0, 0, board.width, board.height);
-
-        background.fillStyle = this.colours[1];
-        for (let i = 0; i < snake.length; i++) {
-            background.fillRect(snake[i][0], snake[i][1], this.blocksize, this.BLOCKSIZE);
+        // snake
+        this.grid.fillStyle = this.colours[1];
+        for (let i = 0; i < state.snake.length; i++) {
+            background.fillRect(state.snake[i][0], state.snake[i][1], this.blocksize, this.BLOCKSIZE);
         }
 
-        colourBoard(this.colours[2], food[0], food[1], BLOCKSIZE, BLOCKSIZE);
+        // food
+        colourBoard(this.colours[2], state.food[0], state.food[1], BLOCKSIZE, BLOCKSIZE);
     }
 
     colourBoard(colour, a,b,c,d) {

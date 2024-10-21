@@ -2,7 +2,7 @@
 import { Board } from './Board.js';
 import { State } from './State.js';
 import {gameOver} from "../alertMessage";
-import {renderScoreBoard} from "../scoreBoard";
+import {renderScoreBoard} from "../ScoreBoard";
 
 
 
@@ -12,34 +12,31 @@ const BOARD_WIDTH = 35;
 
 
 class SnakeGame {
-    // gamestate
+    // gamestate -> playing, game over, paused, restarted
+    // board -> board rendering
+
     board;
     state;
 
     constructor() {
         this.board = new Board(BOARD_HEIGHT, BOARD_WIDTH, BLOCKSIZE, document);
-        this.state = new State();
+        this.state = new State(this.board);
+        setFrameRate(10);
     }
 
     // ----------------- Game Window -----------------
+    setFrameRate(frameRate){
+        setInterval(this.board.renderBoard(this.getState()), (100 / 10)*frameRate); // 10 frames per second
+    }
 
-    loadGameWindow() {
-
-        board.renderBoard(state):
-
-        loadSnake();
-
-        if (gameOver(getSnake(), board.width, board.height)) {
-            return;
-        }
-
-
-        renderBoard();
-        renderScoreBoard(getSnake().length-1);
+    getState() {
+        this.state.update();
+        return this.state;
     }
 
 
     // ----------------- Game State  -----------------
+
     pauseGame() {
 
     }

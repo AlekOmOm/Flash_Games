@@ -1,37 +1,15 @@
 
-import { renderScoreBoard } from "../scoreBoard.js";
-import { initializeGameButtons } from "../gameButtons.js";
-import { gameOver } from "../alertMessage.js";
-import { processUserInput } from "../userInput.js";
-import { State } from "./gameSmate.js";
+import {SnakeGame} from "./SnakeGame"
+import {initializeGameButtons} from "../gameButtons";
+import {renderScoreBoard} from "../ScoreBoard";
+
 
 
 
 // ----------------- Game Window -----------------
-window.onload = loadGameWindow ();
+window.onload = loadBrowserWindow ();
 
-
-function loadWindowGame(){
-    loadFrame();
-    setInterval(loadFrame, 10/1000);
+loadBrowserWindow() {
+    SnakeGame game = new SnakeGame()
+    initializeGameButtons(game.pauseGame(), game.restartGame());
 }
-
-
-
-// ----------------- Game Frame -----------------
-
-function loadFrame(){
-
-
-}
-
-// ----------------- main operations -----------------
-
-
-
-// ----------------- Game Frame -----------------
-
-
-
-
-// ----------------- Board -----------------
