@@ -1,5 +1,5 @@
 import {processUserInput} from "../UserInput.js";
-import {Grid, getRandomBlockPoint} from "./SnakeGame.js";
+import {Grid, getRandomBlock} from "./SnakeGame.js";
 
 const DIRECTION_KEY_MAPPING = {
     "ArrowUp": 1,
@@ -31,7 +31,7 @@ export class SnakeEntity {
 
     initSnakeBody() {
         this.body = [
-            [(getRandomBlockPoint(), getRandomBlockPoint())]
+            [(getRandomBlock(), getRandomBlock())]
         ];
     }
 

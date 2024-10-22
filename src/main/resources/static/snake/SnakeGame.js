@@ -1,16 +1,9 @@
 import { Board } from './Board.js';
 import { State } from './State.js';
+import { Grid } from './Grid.js';
 import {initGameButtonListeners} from "../GameButtons.js";
 
-export const Grid = { // TODO: add blocks logic for Snake and Food.
-    BLOCKSIZE: 20,
-    BOARD_HEIGHT: 35,
-    BOARD_WIDTH: 35
-}
 
-export function getRandomBlockPoint() {
-    return Math.floor(Math.random() * Grid.BOARD_HEIGHT) * Grid.BLOCKSIZE;
-}
 
 export const status = {
     RUNNING: "RUNNING",

@@ -1,7 +1,7 @@
 
 // ----------------- Constants -----------------
 
-import {getRandomBlockPoint} from "./SnakeGame.js";
+import {getRandomBlock} from "./SnakeGame.js";
 
 export class FoodEntity {
 
@@ -18,8 +18,8 @@ export class FoodEntity {
 
     setNewPoint(snake) {
         do {
-            this.foodX = getRandomBlockPoint();
-            this.foodY = getRandomBlockPoint();
+            this.foodX = getRandomBlock();
+            this.foodY = getRandomBlock();
         } while (snake.body.some(part => part[0] === this.foodX && part[1] === this.foodY));
     }
 
