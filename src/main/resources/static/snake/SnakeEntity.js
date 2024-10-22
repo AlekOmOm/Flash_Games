@@ -1,5 +1,5 @@
 import {processUserInput} from "../UserInput.js";
-import {getRandomPoint} from "./SnakeGame.js";
+import {Grid, getRandomBlockPoint} from "./SnakeGame.js";
 
 const DIRECTION_KEY_MAPPING = {
     "ArrowUp": 1,
@@ -15,11 +15,9 @@ const DIRECTION_KEY_MAPPING = {
 // ----------------- main operations -----------------
 
 export class SnakeEntity {
-    body;
-    direction;
-    action;
 
     constructor() {
+        this.direction = 0;
         this.initSnakeBody();
         this.initMoveListener();
         this.actions = new Map([
@@ -31,7 +29,8 @@ export class SnakeEntity {
     }
 
     initSnakeBody() {
-        this.body.push([getRandomPoint(), getRandomPoint()]);
+        this.body = [];
+        this.body.push([getRandomBlockPoint(), getRandomBlockPoint()]);
     }
 
     // ----------------- updates -----------------
@@ -51,7 +50,7 @@ export class SnakeEntity {
 
 
     initMoveListener() {
-        document.addEventListener("keydown", function (event) {
+        document.addEventListener("keydown", (event) => {
             this.setDirection(processUserInput(event, DIRECTION_KEY_MAPPING));
         });
     }
@@ -59,7 +58,7 @@ export class SnakeEntity {
     // ----------------- Direction -----------------
 
     setDirection(newDirection) {
-        if (direction === newDirection ) {
+        if (this.direction === newDirection ) {
             return;
         }
 
@@ -67,11 +66,12 @@ export class SnakeEntity {
             return;
         }
 
-        direction = newDirection;
+        this.direction = newDirection;
+        console.log("Snake direction: ", this.direction);
     }
 
     isOppositeDirection(nr) {
-        let check = direction + nr;
+        let check = this.direction + nr;
 
         return check === 4 || check === 6;
     }
@@ -79,10 +79,9 @@ export class SnakeEntity {
     // --- helper methods ---
     toStringSnake() {
         let str = "";
-        for (let i = 0; i < this.snake.length; i++) {
-            str += "(" + this.snake[i][0] + "," + this.snake[i][1] + ")";
+        for (let i = 0; i < this.body.length; i++) {
+            str += "(" + this.body[i][0] + "," + this.body[i][1] + ")";
         }
         return str;
     }
-
 }

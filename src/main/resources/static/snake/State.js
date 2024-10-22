@@ -1,21 +1,14 @@
 import { Board } from "./Board.js";
 import {SnakeEntity} from "./SnakeEntity.js";
-import {Food} from "./Food.js";
+import {FoodEntity} from "./FoodEntity.js";
 
 
 export class State {
-    snake;
-    food;
-    board;
 
     constructor(board) {
         this.snake = new SnakeEntity(board);
-        this.food = new Food();
+        this.food = new FoodEntity(this.snake);
         this.board = board;
-    }
-
-    restart(board) {
-
     }
 
     update() {
@@ -30,6 +23,7 @@ export class State {
             this.gameOver();
         }
     }
+
 
     // ------ snake movement logic -----
 

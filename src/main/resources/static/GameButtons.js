@@ -1,19 +1,34 @@
 
-var start = document.getElementById("start-button");
-var pause = document.getElementById("pause-button");
-var restart = document.getElementById("restart-button");
-var resetHighscore = document.getElementById("reset-highscore-button");
+var startButton = document.getElementById("start-button");
+var pauseButton = document.getElementById("pause-button");
+var restartButton = document.getElementById("restart-button");
+var resetHighscoreButton = document.getElementById("reset-highscore-button");
 
 
-export function initializeGameButtons(pauseCallback, restartCallback) {
+// ----------------- Buttons  -----------------
+
+function attachButtonListener(button, handler) {
+    button.addEventListener("click", handler);
+}
+
+export function initGameButtonListeners(pauseCallback, restartCallback) {
     //start.addEventListener("click", startCallback);
-    pause.addEventListener("click", pauseCallback);
-    restart.addEventListener("click", restartCallback);
+    attachButtonListener(pauseButton, pauseCallback);
+    attachButtonListener(restartButton, restartCallback);
+    attachButtonListener(resetHighscoreButton, resetHighscore);
 
+    displayHighscore();
+    resetHighscore.innerHTML = '&#x21ba;';
+}
+
+// ----------------- Highscore Operations -----------------
+function resetHighscore() {
     resetHighscore.addEventListener("click", function () {
         sessionStorage.setItem("highscore", 0);
-        document.getElementById("highscore").innerHTML = ""+sessionStorage.getItem("highscore");
+        displayHighscore();
     });
+}
 
-    resetHighscore.innerHTML = '&#x21ba;';
+function displayHighscore() {
+    document.getElementById("highscore").innerHTML = "" + sessionStorage.getItem("highscore");
 }

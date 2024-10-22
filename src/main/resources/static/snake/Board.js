@@ -1,6 +1,3 @@
-
-var canvas;
-
 export const BoardColors = {
     BACKGROUND: "black",
     SNAKE: "lime",
@@ -8,43 +5,45 @@ export const BoardColors = {
 };
 
 export class Graphics {
-    constructor(grid) {
-        this.grid = grid;
+    constructor(canvas) {
+        this.canvas = canvas;
     }
 
     fillAreaWithColor(colour, a, b, c, d) {
-        this.grid.fillStyle = colour;
-        this.grid.fillRect(a,b,c,d);
+        this.canvas.fillStyle = colour;
+        this.canvas.fillRect(a,b,c,d);
     }
 }
 
 export class Board {
 
     constructor(grid) {
-        this.height = grid.BOARD_HEIGHT;
-        this.width = grid.BOARD_WIDTH
-        this.blockSize = grid.BLOCKSIZE;
+        this.grid = grid;
         this.initializeBoard();
     }
 
     initializeBoard() {
-        const canvas = document.getElementById("canvas");
-        canvas.height = this.height * this.blocksize;
-        canvas.width = this.width * this.blocksize;
-        const grid = canvas.getContext("2d");
-        this.graphics = new Graphics(grid);
+        this.canvasEle = document.getElementById("canvas");
+        this.canvasEle.height = this.grid.BOARD_HEIGHT * this.grid.BLOCKSIZE;
+        this.canvasEle.width = this.grid.BOARD_WIDTH * this.grid.BLOCKSIZE;
+        this.canvas = this.canvasEle.getContext("2d");
+        this.graphics = new Graphics(this.canvas);
     }
 
     renderBoard(state) {
-        this.graphics.fillAreaWithColor(BoardColors.BACKGROUND, 0, 0, canvas.width, canvas.height);
+        this.graphics.fillAreaWithColor(BoardColors.BACKGROUND, 0, 0, this.canvasEle.width, this.canvasEle.height);
 
         // snake
         for (let part of state.snake.body) {
-            this.graphics.fillAreaWithColor(BoardColors.SNAKE, part[0], part[1], this.blockSize, this.blockSize);
+            this.graphics.fillAreaWithColor(BoardColors.SNAKE, part[0], part[1], this.grid.BLOCKSIZE, this.grid.BLOCKSIZE);
         }
 
         // food
-        this.graphics.fillAreaWithColor(BoardColors.FOOD, state.food[0], state.food[1], this.blocksize, this.blocksize);
+        this.graphics.fillAreaWithColor(BoardColors.FOOD, state.food.foodX, state.food.foodY, this.grid.BLOCKSIZE, this.grid.BLOCKSIZE);
     }
+
+
+
+
 }
 

@@ -1,6 +1,7 @@
 
 import { Board } from './Board.js';
 import { State } from './State.js';
+import {initGameButtonListeners} from "../GameButtons";
 
 
 export const Grid = {
@@ -9,13 +10,18 @@ export const Grid = {
     BOARD_WIDTH: 35
 }
 
+export function getRandomBlockPoint() {
+    // get rounded random number between 0 and BOARD_HEIGHT
+    return Math.floor(Math.random() * Grid.BOARD_HEIGHT*Grid.BLOCKSIZE);
+}
+
 export const status = {
     RUNNING: "RUNNING",
     PAUSED: "PAUSED",
     RESTARTED: "RESTARTED"
 }
 
-const STATE_UPDATE_RATE = 100; // 10 fps
+export const STATE_UPDATE_RATE = 1000/10; // 10 fps
 
 
 export class SnakeGame {
@@ -25,6 +31,8 @@ export class SnakeGame {
         this.initStatusFunctions();
         this.currentStatus = status.RUNNING;
         this.updateGameRendering();
+
+        this.debugLogger();
     }
 
     initBoardAndState() {
@@ -34,14 +42,15 @@ export class SnakeGame {
 
     initStatusFunctions() {
         this.statusFunctions = {
-            [status.RUNNING]: this.getRunningState(),
-            [status.PAUSED]: this.getIdleState(),
-            [status.RESTARTED]: this.getResetState()
+            [status.RUNNING]: this.getRunningState.bind(this),
+            [status.PAUSED]: this.getIdleState.bind(this),
+            [status.RESTARTED]: this.getResetState.bind(this)
         };
     }
 
     getRunningState() {
-        return this.state.update();
+        this.state.update();
+        return this.state;
     }
 
     getIdleState() {
@@ -57,26 +66,51 @@ export class SnakeGame {
     // -----------------  -----------------
 
     updateGameRendering() {
-        this.state = this.statusFunctions[this.currentStatus]();
-        this.board.renderBoard(this.state);
-        setInterval(this.board, FRAME_RATE);
+        if (this.renderInterval) {
+            clearInterval(this.renderInterval);
+        }
+        this.renderInterval = setInterval(this.render(), STATE_UPDATE_RATE);
     }
+    render() {
+        this.board.renderBoard(this.statusFunctions[this.currentStatus]());
+    }
+
+
+
 
     // ----------------- Game -----------------
 
     pauseGame() {
-        this.currentStatus = status.PAUSED;
-        this.updateGameRendering();
+        this.setStatus(status.PAUSED);
     }
 
     restartGame() {
-        this.currentStatus = status.RESTARTED;
+        this.setStatus(status.RESTARTED);
+    }
+
+    setStatus(newStatus) {
+        this.currentStatus = newStatus;
         this.updateGameRendering();
     }
 
-}
 
-export function getRandomPoint() {
-    // get rounded random number between 0 and BOARD_HEIGHT
-    return Math.floor(Math.random() * Grid.BOARD_HEIGHT).toFixed(0);
+    // -----------------  Debug -----------------
+
+    debugLogger() {
+        console.log("SnakeGame.js loaded");
+        // set pause status, and then print board, snake and food positions
+
+        console.log("1. Board: ");
+        console.log(" canvasEle: (height", this.board.canvasEle.height + ", width", this.board.canvasEle.width + ")");
+        console.log(" canvas: ", this.board.canvas);
+        console.log(" grid: (height", this.board.grid.BOARD_HEIGHT + ", width", this.board.grid.BOARD_WIDTH + ", blocksize", this.board.grid.BLOCKSIZE + ")");
+
+        console.log("2. Snake: ", this.state.snake);
+        console.log(" body: ", this.state.snake.body);
+        console.log(" direction: ", this.state.snake.direction);
+
+        console.log("3. Food: ", this.state.food);
+
+    }
+
 }

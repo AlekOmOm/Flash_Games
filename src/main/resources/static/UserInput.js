@@ -2,14 +2,18 @@
 
 
 
-export function processUserInput(e, returnValues) {
-    return matchInput(e.key, returnValues);
+export function processUserInput(e, keyMapping) {
+    return matchInput(e.key, keyMapping);
 }
 
-function matchInput (input, returnValues) {
-    if (input in returnValues) {
-        sessionStorage.setItem("gameStarted", "true");
-        return returnValues[input];
-    }
+function matchInput (input, keyMapping) {
+    console.log("input: ", input);
 
+    for (let key in keyMapping) {
+        if (key === input) {
+            console.log("keyMapping[key]: ", keyMapping[key]);
+            return parseInt(keyMapping[key]);
+        }
+    }
+    return null;
 }
