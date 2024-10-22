@@ -1,43 +1,50 @@
 
 var canvas;
 
-export class Board {
-    grid;
-    blocksize;
-    colours = ["black", "lime", "red"];
+export const BoardColors = {
+    BACKGROUND: "black",
+    SNAKE: "lime",
+    FOOD: "red"
+};
 
-
-    constructor(BOARD_HEIGHT, BOARD_WIDTH, BLOCKSIZEPrm) {
-        this.BLOCKSIZE = BLOCKSIZEPrm;
-        this.initializeBoard();
+export class Graphics {
+    constructor(grid) {
+        this.grid = grid;
     }
 
-    initializeBoard(BOARD_HEIGHT, BOARD_WIDTH) {
-        canvas = document.getElementById("canvas");
-        canvas.height = BOARD_HEIGHT * this.blocksize;
-        canvas.width = BOARD_WIDTH * this.blocksize;
-        this.grid = canvas.getContext("2d");
-    }
-
-
-    renderBoard(state) {
-        // background
-        colourBoard(this.colours[0], 0, 0, canvas.width, canvas.height);
-
-        // snake
-        this.grid.fillStyle = this.colours[1];
-        for (let i = 0; i < state.snake.length; i++) {
-            this.grid.fillRect(state.snake[i][0], state.snake[i][1], this.blocksize, this.BLOCKSIZE);
-        }
-
-        // food
-        colourBoard(this.colours[2], state.food[0], state.food[1], this.blocksize, this.blocksize);
-    }
-
-    colourBoard(colour, a,b,c,d) {
+    fillAreaWithColor(colour, a, b, c, d) {
         this.grid.fillStyle = colour;
         this.grid.fillRect(a,b,c,d);
     }
+}
 
+export class Board {
+
+    constructor(grid) {
+        this.height = grid.BOARD_HEIGHT;
+        this.width = grid.BOARD_WIDTH
+        this.blockSize = grid.BLOCKSIZE;
+        this.initializeBoard();
+    }
+
+    initializeBoard() {
+        const canvas = document.getElementById("canvas");
+        canvas.height = this.height * this.blocksize;
+        canvas.width = this.width * this.blocksize;
+        const grid = canvas.getContext("2d");
+        this.graphics = new Graphics(grid);
+    }
+
+    renderBoard(state) {
+        this.graphics.fillAreaWithColor(BoardColors.BACKGROUND, 0, 0, canvas.width, canvas.height);
+
+        // snake
+        for (let part of state.snake.body) {
+            this.graphics.fillAreaWithColor(BoardColors.SNAKE, part[0], part[1], this.blockSize, this.blockSize);
+        }
+
+        // food
+        this.graphics.fillAreaWithColor(BoardColors.FOOD, state.food[0], state.food[1], this.blocksize, this.blocksize);
+    }
 }
 

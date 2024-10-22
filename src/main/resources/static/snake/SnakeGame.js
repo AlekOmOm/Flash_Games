@@ -3,80 +3,80 @@ import { Board } from './Board.js';
 import { State } from './State.js';
 
 
+export const Grid = {
+    BLOCKSIZE: 20,
+    BOARD_HEIGHT: 35,
+    BOARD_WIDTH: 35
+}
 
-const BLOCKSIZE = 20;
-const BOARD_HEIGHT = 35; // TODO fix height and width setting to with or without "* BLOCKSIZE"
-const BOARD_WIDTH = 35;
+export const status = {
+    RUNNING: "RUNNING",
+    PAUSED: "PAUSED",
+    RESTARTED: "RESTARTED"
+}
+
+const STATE_UPDATE_RATE = 100; // 10 fps
 
 
 export class SnakeGame {
-    // gamestate -> playing, game over, paused, restarted
-    // board -> board rendering
-
-    board;
-    state;
 
     constructor() {
-        this.board = new Board(BOARD_HEIGHT, BOARD_WIDTH, BLOCKSIZE);
+        this.initBoardAndState();
+        this.initStatusFunctions();
+        this.currentStatus = status.RUNNING;
+        this.updateGameRendering();
+    }
+
+    initBoardAndState() {
+        this.board = new Board(Grid);
         this.state = new State(this.board);
-        this.board.renderBoard(this.getState());
-        setFrameRate(10);
     }
 
-    // ----------------- Game Window -----------------
-    setFrameRate(frameRate){
-        setInterval(this.board.renderBoard(this.getState()), (100 / 10)*frameRate); // 10 frames per second
+    initStatusFunctions() {
+        this.statusFunctions = {
+            [status.RUNNING]: this.getRunningState(),
+            [status.PAUSED]: this.getIdleState(),
+            [status.RESTARTED]: this.getResetState()
+        };
     }
 
-    getState() {
-        this.state.update();
+    getRunningState() {
+        return this.state.update();
+    }
+
+    getIdleState() {
+        return this.state;
+    }
+
+    getResetState() {
+        this.state = new State(new Board(Grid));
         return this.state;
     }
 
 
-    // ----------------- Game State  -----------------
+    // -----------------  -----------------
+
+    updateGameRendering() {
+        this.state = this.statusFunctions[this.currentStatus]();
+        this.board.renderBoard(this.state);
+        setInterval(this.board, FRAME_RATE);
+    }
+
+    // ----------------- Game -----------------
 
     pauseGame() {
-
+        this.currentStatus = status.PAUSED;
+        this.updateGameRendering();
     }
 
     restartGame() {
-
+        this.currentStatus = status.RESTARTED;
+        this.updateGameRendering();
     }
-
-
-
-
-    /*
-    initializeBoard();
-
-    sessionStorage.setItem("gameOver", "false");
-    sessionStorage.setItem("gameStarted", "false");
-
-    initializeGameButtons(
-    function() {
-        initialize();
-        initializeSnake(BLOCKSIZE, BOARD_HEIGHT, BOARD_WIDTH);
-        sessionStorage.setItem("gameOver", "false");
-        sessionStorage.setItem("gameStarted", "true");
-        console.log("game start button clicked");
-    },
-    function() {
-        alert("Game paused!");
-    },
-    function() {
-        restart();
-    }
-
-    initializeUserInput();
-
-    loadFrame();
-    setInterval(loadFrame, 1000 / 10);
-    */
 
 }
 
 export function getRandomPoint() {
     // get rounded random number between 0 and BOARD_HEIGHT
-    return Math.floor(Math.random() * BOARD_HEIGHT).toFixed(0);
+    return Math.floor(Math.random() * Grid.BOARD_HEIGHT).toFixed(0);
 }

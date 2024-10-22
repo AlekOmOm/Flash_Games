@@ -14,53 +14,66 @@ export class State {
         this.board = board;
     }
 
+    restart(board) {
+
+    }
+
     update() {
-        this.snake = this.snake.update();
-        this.food.load();
+        this.snake.updatePos();
+
+        if (this.isFoodEaten()) {
+            this.food.setNewPoint(this.snake.body);
+            this.snake.updateBody(true)
+        }
+
+        if (this.hasCollided()) {
+            this.gameOver();
+        }
     }
 
     // ------ snake movement logic -----
 
+    isFoodEaten() {
+        return this.snake.body[0][0] === this.food.foodX && this.snake.body[0][1] === this.food.foodY;
+    }
+
     hasCollided() {
-
+        return this.hasCollidedWithWall()
+            || this.hasCollidedWithItself();
     }
 
-    isFoodedEaten() {
-        this.food.foodIsEaten(this.snake.snakeX, this.snake.snakeY);
-    }
-
-    // ----------------- Game Over logic -----------------
-    gameOver() {
-
-        let snakeX = this.snake[0][0];
-        let snakeY = this.snake[0][1];
-
-        if (sessionStorage.getItem("gameOver") === "true") {
-            return true;
-        }
-
+    hasCollidedWithWall() {
+        const head = this.snake.body[0];
         // Check if the snake is out of bounds
-        if (snakeX < 0 || snakeY < 0 || snakeX > width || snakeY > height) {
-            alert("Game over! You collided with the wall!");
-            sessionStorage.setItem("gameOver", "true");
-            console.log("game over, snake position: (" + snakeX + "," + snakeY + "), board: (" + width + "," + height + ")");
+        if (head[0] < 0 || head[1] < 0 || head[0] > this.board.width || head[1] > this.board.height) {
+            this.gameOver("Game over! You collided with the wall!");
             return true;
         }
+        return false;
+    }
 
+    hasCollidedWithItself() {
+        const body = this.snake.body;
         // Check if the snake collides with itself
-        for (let i = 1; i < snake.length; i++) {
-            if (snakeX === snake[i][0] && snakeY === snake[i][1]) {
-                alert("Game over! You collided with yourself!");
-                sessionStorage.setItem("gameOver", "true");
-                console.log("game over, snake position: (" + snakeX + "," + snakeY + "), snake: {" + toStringSnake(snake) + "}");
-
+        for (let i = 1; i < body.length; i++) {
+            if (body[0][0] === body[i][0] && body[0][1] === body[i][1]) {
+                this.gameOver("Game over! You collided with yourself!");
                 return true;
             }
         }
         return false;
     }
 
+    // ----------------- Game Over logic -----------------
+    gameOver(message) {
+        if (sessionStorage.getItem("gameOver") === "true") {
+            return true;
+        }
+        sessionStorage.setItem("gameOver", "true");
 
+        alert(message);
 
-
+        console.log(`game over, snake position: (${this.snake.body[0][0]}, ${this.snake.body[0][1]}), board: (${this.board.width}, ${this.board.height})`);
+        return false;
+    }
 }

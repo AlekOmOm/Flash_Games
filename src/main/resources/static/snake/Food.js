@@ -6,6 +6,7 @@ import {getRandomPoint} from "./SnakeGame.js";
 export class Food {
 
     foodX; foodY;
+    isEaten;
 
     constructor() {
         this.foodX = getRandomPoint();
@@ -13,21 +14,24 @@ export class Food {
     }
 
     getFoodPoint() {
-        if (this.foodIsEaten()) {
-            this.setFoodPoint();
-        }
         return [this.foodX, this.foodY];
     }
 
-    setFoodPoint(snake) {
+    setNewPoint(snake) {
         do {
             this.foodX = getRandomPoint();
             this.foodY = getRandomPoint();
-        } while (snake.some(segment => segment[0] === this.foodX && segment[1] === this.foodY));
+        } while (snake.some(part => part[0] === this.foodX && part[1] === this.foodY));
     }
 
-    foodIsEaten(snakeX, snakeY) {
-        return snakeX === this.foodX && snakeY === this.foodY;
+    setIsEaten(bool) {
+        this.isEaten = bool;
     }
+
+    getIsEaten() {
+        return this.isEaten;
+    }
+
+
 
 }

@@ -1,100 +1,76 @@
 import {processUserInput} from "../UserInput.js";
 import {getRandomPoint} from "./SnakeGame.js";
 
-
+const DIRECTION_KEY_MAPPING = {
+    "ArrowUp": 1,
+    "ArrowRight": 2,
+    "ArrowDown": 3,
+    "ArrowLeft": 4,
+    "w": 1,
+    "d": 2,
+    "s": 3,
+    "a": 4
+};
 
 // ----------------- main operations -----------------
 
 export class SnakeEntity {
-    snake = [];
-
-    snakeX = getRandomPoint();
-    snakeY = getRandomPoint();
-    body = [];
-    direction = 0;
+    body;
+    direction;
+    action;
 
     constructor() {
-        this.body = [];
-        this.body.push([this.snakeX, this.snakeY]);
-
-        this.initializeMovement();
+        this.initSnakeBody();
+        this.initMoveListener();
+        this.actions = new Map([
+            [1, () => { this.snakeY -= this.BLOCKSIZE; }], // up
+            [2, () => { this.snakeX += this.BLOCKSIZE; }], // right
+            [3, () => { this.snakeY += this.BLOCKSIZE; }], // down
+            [4, () => { this.snakeX -= this.BLOCKSIZE; }], // left
+        ]);
     }
 
-
-    // ----------------- main -----------------
-
-    load(food) { // TODO food interaction
-        updatePos(direction);
-        return update(food);
+    initSnakeBody() {
+        this.body.push([getRandomPoint(), getRandomPoint()]);
     }
 
     // ----------------- updates -----------------
 
-    update(food) {
-        if (this.body.length === 0) {
-            this.body.push([getRandomPoint(),getRandomPoint()]);
-        }
-
-        let snake_updated = [];
-        snake_updated.push([this.snakeX,this.snakeY]); // push head first
-
-        for (let i = 0; i<this.body.length; i++) {
-            snake_updated.push(this.body[i]);
-        }
-
-        if (!(food.isFoodedEaten())) {
-            snake_updated.pop();
-        }
-
-        this.snake = snake_updated;
-        return this.snake;
+    updatePos() {
+        this.action = this.actions.get(this.direction);
+        if (this.action) this.action();
     }
 
-    updatePos(dirNr) {
-        if (dirNr === 1) { // up
-            snakeY-=BLOCKSIZE;
-        } else if (dirNr === 2) { // right
-            snakeX+=BLOCKSIZE;
-        } else if (dirNr === 3) { // down
-            snakeY+=BLOCKSIZE;
-        } else if (dirNr === 4) { // left
-            snakeX-=BLOCKSIZE;
+    updateBody(hasFoodBeenEaten) {
+        if (!hasFoodBeenEaten){
+            return this.body.pop();
         }
     }
-
-
 
     // ----------------- Movement -----------------
-    initializeMovement(){
+
+
+    initMoveListener() {
         document.addEventListener("keydown", function (event) {
-            setDirection(processUserInput(event, {
-                "ArrowUp": 1,
-                "ArrowRight": 2,
-                "ArrowDown": 3,
-                "ArrowLeft": 4,
-                "w": 1,
-                "d": 2,
-                "s": 3,
-                "a": 4
-            }));
+            this.setDirection(processUserInput(event, DIRECTION_KEY_MAPPING));
         });
     }
 
     // ----------------- Direction -----------------
 
-    setDirection(nr) {
-        if (direction === nr ) {
+    setDirection(newDirection) {
+        if (direction === newDirection ) {
             return;
         }
 
-        if (oppositeDirection(nr)) {
+        if (this.isOppositeDirection(newDirection)) {
             return;
         }
 
-        direction = nr;
+        direction = newDirection;
     }
 
-    oppositeDirection(nr) {
+    isOppositeDirection(nr) {
         let check = direction + nr;
 
         return check === 4 || check === 6;
