@@ -28,27 +28,26 @@ export class SnakeEntity {
         ]);
     }
 
+
     initSnakeBody() {
-        this.body = [];
-        this.body.push([getRandomBlockPoint(), getRandomBlockPoint()]);
+        this.body = [
+            [(getRandomBlockPoint(), getRandomBlockPoint())]
+        ];
     }
 
-    // ----------------- updates -----------------
+// ----------------- updates -----------------
 
     updatePos() {
         let action = this.actions.get(this.direction);
-
-        if (!action) {
-            return;
+        if (action) {
+            let newHead = action();
+            this.body.unshift(newHead); // add 'newHead' at index 0
         }
-
-        let newHead = action();
-        this.body.unshift(newHead); // add 'newHead' at index 0
     }
 
     updateBody(hasFoodBeenEaten) {
-        if (!hasFoodBeenEaten){
-            return this.body.pop();
+        if (!hasFoodBeenEaten) {
+            this.body.pop();
         }
     }
 

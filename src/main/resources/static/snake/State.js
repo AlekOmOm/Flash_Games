@@ -9,6 +9,8 @@ export class State {
         this.snake = new SnakeEntity(board);
         this.food = new FoodEntity(this.snake);
         this.board = board;
+
+        console.log("State: ", this);
     }
 
     update() {
@@ -28,10 +30,26 @@ export class State {
     // ------ snake movement logic -----
 
     isFoodEaten() {
-        return this.snake.body[0][0] === this.food.foodX && this.snake.body[0][1] === this.food.foodY;
+        return this.isXYHit(this.food.foodX, this.food.foodY);
+    }
+
+    isXYHit(x, y) {
+        const index = this.snake.body.findIndex((part) => {
+            return part[0] === x  && part[1] === y;
+        });
+        return index !== -1;
+    }
+
+    isXOrYHit(x, y) {
+        const index = this.snake.body.findIndex((part) => {
+            return part[0] === x  || part[1] === y;
+        });
+        return index !== -1;
     }
 
     hasCollided() {
+        console.log("hasCollided");
+        console.log("snake: ", this.snake);
         return this.hasCollidedWithWall()
             || this.hasCollidedWithItself();
     }
@@ -39,7 +57,8 @@ export class State {
     hasCollidedWithWall() {
         const head = this.snake.body[0];
         // Check if the snake is out of bounds
-        if (head[0] < 0 || head[1] < 0 || head[0] > this.board.width || head[1] > this.board.height) {
+        if (head[0] < 0 || head[0] >= this.board.canvasEle.width ||
+            head[1] < 0 || head[1] >= this.board.canvasEle.height) {
             this.gameOver("Game over! You collided with the wall!");
             return true;
         }

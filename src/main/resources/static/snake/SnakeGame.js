@@ -1,18 +1,15 @@
-
 import { Board } from './Board.js';
 import { State } from './State.js';
 import {initGameButtonListeners} from "../GameButtons.js";
 
-
-export const Grid = {
+export const Grid = { // TODO: add blocks logic for Snake and Food.
     BLOCKSIZE: 20,
     BOARD_HEIGHT: 35,
     BOARD_WIDTH: 35
 }
 
 export function getRandomBlockPoint() {
-    // get rounded random number between 0 and BOARD_HEIGHT
-    return Math.floor(Math.random() * Grid.BOARD_HEIGHT*Grid.BLOCKSIZE);
+    return Math.floor(Math.random() * Grid.BOARD_HEIGHT) * Grid.BLOCKSIZE;
 }
 
 export const status = {
@@ -72,10 +69,21 @@ export class SnakeGame {
         if (this.renderInterval) {
             clearInterval(this.renderInterval);
         }
-        this.renderInterval = setInterval(this.render.bind(this), STATE_UPDATE_RATE);
+        // this.renderInterval = setInterval(this.render.bind(this), STATE_UPDATE_RATE);
+        this.render();
     }
     render() {
-        this.board.renderBoard(this.statusFunctions[this.currentStatus]());
+        this.statusCounter = 0;
+        if (this.currentStatus === status.PAUSED && this.statusCounter < 1) {
+            this.board.renderBoard(this.statusFunctions[this.currentStatus]());
+        } else if (this.currentStatus === status.RESTARTED && this.statusCounter < 1) {
+            this.statusCounter++;
+            this.board.renderBoard(this.statusFunctions[this.currentStatus]());
+            this.setStatus(status.RUNNING);
+        } else if (this.currentStatus === status.RUNNING) {
+            this.statusCounter = 0;
+            this.board.renderBoard(this.statusFunctions[this.currentStatus]());
+        }
     }
 
 
@@ -85,10 +93,12 @@ export class SnakeGame {
 
     pauseGame() {
         this.setStatus(status.PAUSED);
+        this.state.snake.initMoveListener(); // Reinitialize the move listener
     }
 
     restartGame() {
         this.setStatus(status.RESTARTED);
+        this.state.snake.initMoveListener(); // Reinitialize the move listener
     }
 
     setStatus(newStatus) {
