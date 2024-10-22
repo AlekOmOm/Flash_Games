@@ -1,24 +1,26 @@
 import { Board } from "./Board.js";
 import {SnakeEntity} from "./SnakeEntity.js";
 import {FoodEntity} from "./FoodEntity.js";
+import {Grid} from "./Grid";
 
 
 export class State {
 
     constructor(board) {
-        this.snake = new SnakeEntity(board);
-        this.food = new FoodEntity(this.snake);
+        this.grid = new Grid(); // TODO: update state to utilize and manage grid instance
+        this.snake = new SnakeEntity(this.grid.getRandomBlock());
+        this.food = this.grid.getRandomBlock();
         this.board = board;
-
-        console.log("State: ", this);
     }
 
     update() {
-        this.snake.updatePos();
+        this.grid = this.snake.updatePos(this.grid);
+
         let isFoodEaten = this.isFoodEaten();
         if (isFoodEaten) {
-            this.food.setNewPoint(this.snake.body);
+            this.food = this.grid.getRandomBlock();
         }
+
         this.snake.updateBody(isFoodEaten);
 
         if (this.hasCollided()) {
@@ -30,15 +32,9 @@ export class State {
     // ------ snake movement logic -----
 
     isFoodEaten() {
-        return this.isXYHit(this.food.foodX, this.food.foodY);
+        return this.snake.body[0]
     }
 
-    isXYHit(x, y) {
-        const index = this.snake.body.findIndex((part) => {
-            return part[0] === x  && part[1] === y;
-        });
-        return index !== -1;
-    }
 
     isXOrYHit(x, y) {
         const index = this.snake.body.findIndex((part) => {
@@ -76,6 +72,10 @@ export class State {
         }
         return false;
     }
+
+    // ----------------- Food logic -----------------
+
+
 
     // ----------------- Game Over logic -----------------
     gameOver(message) {
