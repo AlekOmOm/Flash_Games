@@ -1,7 +1,7 @@
 
 import { Board } from './Board.js';
 import { State } from './State.js';
-import {initGameButtonListeners} from "../GameButtons";
+import {initGameButtonListeners} from "../GameButtons.js";
 
 
 export const Grid = {
@@ -30,9 +30,12 @@ export class SnakeGame {
         this.initBoardAndState();
         this.initStatusFunctions();
         this.currentStatus = status.RUNNING;
-        this.updateGameRendering();
-
+        this.startGameRendering();
         this.debugLogger();
+    }
+
+    count() {
+        console.log("count");
     }
 
     initBoardAndState() {
@@ -65,11 +68,11 @@ export class SnakeGame {
 
     // -----------------  -----------------
 
-    updateGameRendering() {
+    startGameRendering() {
         if (this.renderInterval) {
             clearInterval(this.renderInterval);
         }
-        this.renderInterval = setInterval(this.render(), STATE_UPDATE_RATE);
+        this.renderInterval = setInterval(this.render.bind(this), STATE_UPDATE_RATE);
     }
     render() {
         this.board.renderBoard(this.statusFunctions[this.currentStatus]());
@@ -90,7 +93,7 @@ export class SnakeGame {
 
     setStatus(newStatus) {
         this.currentStatus = newStatus;
-        this.updateGameRendering();
+        this.startGameRendering();
     }
 
 

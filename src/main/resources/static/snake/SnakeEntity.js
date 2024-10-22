@@ -21,10 +21,10 @@ export class SnakeEntity {
         this.initSnakeBody();
         this.initMoveListener();
         this.actions = new Map([
-            [1, () => { this.snakeY -= this.BLOCKSIZE; }], // up
-            [2, () => { this.snakeX += this.BLOCKSIZE; }], // right
-            [3, () => { this.snakeY += this.BLOCKSIZE; }], // down
-            [4, () => { this.snakeX -= this.BLOCKSIZE; }], // left
+            [1, () => {  return [this.body[0][0], this.body[0][1] - Grid.BLOCKSIZE]; }], // up
+            [2, () => {  return [this.body[0][0] + Grid.BLOCKSIZE, this.body[0][1]]; }], // right
+            [3, () => {  return [this.body[0][0], this.body[0][1] + Grid.BLOCKSIZE]; }], // down
+            [4, () => {  return [this.body[0][0] - Grid.BLOCKSIZE, this.body[0][1]]; }] // left
         ]);
     }
 
@@ -36,8 +36,14 @@ export class SnakeEntity {
     // ----------------- updates -----------------
 
     updatePos() {
-        this.action = this.actions.get(this.direction);
-        if (this.action) this.action();
+        let action = this.actions.get(this.direction);
+
+        if (!action) {
+            return;
+        }
+
+        let newHead = action();
+        this.body.unshift(newHead); // add 'newHead' at index 0
     }
 
     updateBody(hasFoodBeenEaten) {

@@ -5,6 +5,7 @@ import { SnakeGame } from './SnakeGame.js';
 // main of the Game Window
 window.onload = function() {
     new GameWindow();
+
 };
 
 export class GameWindow {
@@ -13,7 +14,6 @@ export class GameWindow {
         this.initGameButtonListeners();
         this.initScoreBoard();
     }
-
 
 
     initGameButtonListeners() {

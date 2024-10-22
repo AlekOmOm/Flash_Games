@@ -1,4 +1,3 @@
-
 var startButton = document.getElementById("start-button");
 var pauseButton = document.getElementById("pause-button");
 var restartButton = document.getElementById("restart-button");

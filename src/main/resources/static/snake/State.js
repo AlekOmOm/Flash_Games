@@ -13,11 +13,11 @@ export class State {
 
     update() {
         this.snake.updatePos();
-
-        if (this.isFoodEaten()) {
+        let isFoodEaten = this.isFoodEaten();
+        if (isFoodEaten) {
             this.food.setNewPoint(this.snake.body);
-            this.snake.updateBody(true)
         }
+        this.snake.updateBody(isFoodEaten);
 
         if (this.hasCollided()) {
             this.gameOver();

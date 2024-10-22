@@ -31,6 +31,7 @@ export class Board {
     }
 
     renderBoard(state) {
+        console.log("state: ", state);
         this.graphics.fillAreaWithColor(BoardColors.BACKGROUND, 0, 0, this.canvasEle.width, this.canvasEle.height);
 
         // snake
