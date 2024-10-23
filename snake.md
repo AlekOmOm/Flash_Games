@@ -2,6 +2,15 @@
 
 ## Snake game logic
 
+A complete Snake game implementation with:
+- Score tracking
+- Pause functionality (Space bar)
+- Game over state
+- Smooth controls (Arrow keys)
+- Collision detection
+- Food generation
+- Responsive grid system
+
 Snake Game Specific Components
 1. Snake: Represents the snake's body and its movement logic.
 2. Snake Logic: Handles the core logic for the snake's behavior, including movement, growth, and collision detection.

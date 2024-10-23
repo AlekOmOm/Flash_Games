@@ -31,31 +31,28 @@ export class SnakeEntity {
     // ----------------- Action Functions -----------------
     getBlockAbove(grid) {
         let [x,y] = [ this.body[0].x, this.body[0].y - 1 ];
-        return this.move(grid, x, y);
+        this.move(grid, x, y);
     }
     getBlockRight(grid) {
         let [x,y] = [ this.body[0].x + 1, this.body[0].y ];
-        return this.move(grid, x, y);
+        this.move(grid, x, y);
     }
     getBlockDown(grid) {
         let [x,y] = [ this.body[0].x, this.body[0].y + 1];
-        return this.move(grid, x, y);
+        this.move(grid, x, y);
     }
     getBlockLeft(grid) {
         let [x,y] = [ this.body[0].x - 1, this.body[0].y ];
-        return this.move(grid, x, y);
+        this.move(grid, x, y);
     }
 
     // ----------------- updates -----------------
     updatePos(grid) {
-        let newGrid = grid;
         let action = this.actions.get(this.direction);
 
         if (action) {
-            newGrid = action(grid);
+            action(grid);
         }
-
-        return newGrid;
     }
 
     updateBody(hasFoodBeenEaten) {
@@ -75,8 +72,9 @@ export class SnakeEntity {
         let newBlock = grid.getSpecificBlock([x, y]);
         if (newBlock != null) {
             this.setNewHead(newBlock);
+            return
         }
-        return grid;
+        return [x,y];
     }
 
     setNewHead(block){

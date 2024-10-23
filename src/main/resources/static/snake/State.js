@@ -1,8 +1,5 @@
-import { Board } from "./Board.js";
 import {SnakeEntity} from "./SnakeEntity.js";
-
 import {Grid, Grid_Consts} from "./Grid.js";
-
 
 export class State {
 
@@ -14,7 +11,9 @@ export class State {
     }
 
     update() {
-        this.grid = this.snake.updatePos(this.grid);
+        let [x,y] = this.snake.updatePos(this.grid);
+
+
 
         let isFoodEaten = this.isFoodEaten();
         if (isFoodEaten) {
@@ -32,7 +31,7 @@ export class State {
     // ------ snake movement logic -----
 
     isFoodEaten() {
-        return this.snake.body[0]
+        return
     }
 
 
@@ -51,7 +50,7 @@ export class State {
     hasCollidedWithWall() {
         const head = this.snake.body[0];
         // Check if the snake is out of bounds
-        if (head[0] < 0 || head[0] >= Grid_Consts.CANVAS_WIDTH ||
+        if (head[0].y < 0 || head[0].x > Grid_Consts.CANVAS_WIDTH ||
             head[1] < 0 || head[1] >= Grid_Consts.CANVAS_HEIGHT) {
             this.gameOver("Game over! You collided with the wall!");
             return true;

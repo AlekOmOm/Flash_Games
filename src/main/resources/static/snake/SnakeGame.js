@@ -103,14 +103,15 @@ export class SnakeGame {
         // set pause status, and then print board, snake and food positions
 
         console.log("1. Board: ");
-
         console.log(" grid: (height", this.board.grid.BOARD_HEIGHT + ", width", this.board.grid.BOARD_WIDTH + ", blocksize", this.board.grid.BLOCKSIZE + ")");
 
-        console.log("2. Snake: ", this.state.snake);
-        console.log(" body: ", this.state.snake.body);
-        console.log(" direction: ", this.state.snake.direction);
+        console.log("2. State: ", this.state);
 
-        console.log("3. Food: ", this.state.food);
+        console.log("  - Snake: ", this.state.snake);
+        console.log("     body: ", this.state.snake.body);
+        console.log("     direction: ", this.state.snake.direction);
+
+        console.log("  - Food: ", this.state.food);
 
     }
 

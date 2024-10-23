@@ -30,7 +30,6 @@ class Block {
     setAsAvailable() {
         this.status = this.Status.AVAILABLE;
     }
-
 }
 
 export class Grid {
