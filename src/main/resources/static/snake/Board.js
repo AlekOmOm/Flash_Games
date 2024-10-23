@@ -1,4 +1,4 @@
-import {Grid_Consts} from "./Grid";
+import {Grid_Consts} from "./Grid.js";
 
 export const BoardColors = {
     BACKGROUND: "black",
