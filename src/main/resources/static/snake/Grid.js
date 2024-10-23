@@ -89,6 +89,6 @@ export class Grid {
     }
 
     isAvailable(block) {
-        return block.getStatus() === Block.Status.AVAILABLE;
+        return block.getStatus() === block.Status.AVAILABLE;
     }
 }

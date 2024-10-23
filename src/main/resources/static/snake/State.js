@@ -1,7 +1,7 @@
 import { Board } from "./Board.js";
 import {SnakeEntity} from "./SnakeEntity.js";
-import {FoodEntity} from "./FoodEntity.js";
-import {Grid} from "./Grid";
+
+import {Grid} from "./Grid.js";
 
 
 export class State {
@@ -44,8 +44,6 @@ export class State {
     }
 
     hasCollided() {
-        console.log("hasCollided");
-        console.log("snake: ", this.snake);
         return this.hasCollidedWithWall()
             || this.hasCollidedWithItself();
     }

@@ -1,5 +1,5 @@
 import {processUserInput} from "../UserInput.js";
-import {Grid} from "./Grid";
+import {Grid} from "./Grid.js";
 
 const DIRECTION_KEY_MAPPING = {
     "ArrowUp": 1,
