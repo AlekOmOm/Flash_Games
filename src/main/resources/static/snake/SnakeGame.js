@@ -24,12 +24,8 @@ export class SnakeGame {
         this.debugLogger();
     }
 
-    count() {
-        console.log("count");
-    }
-
     initBoardAndState() {
-        this.board = new Board(Grid);
+        this.board = new Board(new Grid());
         this.state = new State(this.board);
     }
 
@@ -107,8 +103,7 @@ export class SnakeGame {
         // set pause status, and then print board, snake and food positions
 
         console.log("1. Board: ");
-        console.log(" canvasEle: (height", this.board.canvasEle.height + ", width", this.board.canvasEle.width + ")");
-        console.log(" canvas: ", this.board.canvas);
+
         console.log(" grid: (height", this.board.grid.BOARD_HEIGHT + ", width", this.board.grid.BOARD_WIDTH + ", blocksize", this.board.grid.BLOCKSIZE + ")");
 
         console.log("2. Snake: ", this.state.snake);

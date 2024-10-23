@@ -2,7 +2,9 @@
 export const Grid_Consts = {
     BLOCK_SIZE: 20,
     BOARD_HEIGHT: 35,
-    BOARD_WIDTH: 35
+    BOARD_WIDTH: 35,
+    CANVAS_HEIGHT: BOARD_HEIGHT*BLOCK_SIZE,
+    CANVAS_WIDTH: BOARD_WIDTH*BLOCK_SIZE
 }
 
 class Block {
