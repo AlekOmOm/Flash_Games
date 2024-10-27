@@ -1,7 +1,6 @@
 import { Board } from './Board.js';
 import { State } from './State.js';
 import { Grid } from './Grid.js';
-import {initGameButtonListeners} from "../GameButtons.js";
 
 
 
@@ -13,6 +12,10 @@ export const status = {
 
 export const STATE_UPDATE_RATE = 1000/10; // 10 fps
 
+// responsibility:
+//      init of Grid, Board, State,
+//      game status of Pause, Restart, and Running,
+//      render the game
 
 export class SnakeGame {
 
@@ -24,8 +27,11 @@ export class SnakeGame {
         this.debugLogger();
     }
 
+
+    // ----------------- init -----------------
     initBoardAndState() {
-        this.board = new Board(new Grid());
+        this.grid = new Grid();
+        this.board = new Board(this.grid);
         this.state = new State(this.board);
     }
 
@@ -37,22 +43,25 @@ export class SnakeGame {
         };
     }
 
-    getRunningState() {
-        this.state.update();
-        return this.state;
+    // ----------------- Game Status -----------------
+
+    pauseGame() {
+        this.updateStatus(status.PAUSED);
+        this.state.snake.initMoveListener(); // Reinitialize the move listener
     }
 
-    getIdleState() {
-        return this.state;
+    restartGame() {
+        this.updateStatus(status.RESTARTED);
+        this.state.snake.initMoveListener(); // Reinitialize the move listener
     }
 
-    getResetState() {
-        this.state = new State(new Board(Grid));
-        return this.state;
+    updateStatus(newStatus) {
+        this.currentStatus = newStatus;
+        this.startGameRendering();
     }
 
 
-    // -----------------  -----------------
+    // ----------------- Rendering -----------------
 
     startGameRendering() {
         if (this.renderInterval) {
@@ -61,39 +70,47 @@ export class SnakeGame {
         // this.renderInterval = setInterval(this.render.bind(this), STATE_UPDATE_RATE);
         this.render();
     }
+
     render() {
+        switch (this.currentStatus) {
+            case status.RUNNING:
+                this.handleRunningStatus();
+                break;
+            case status.PAUSED:
+                this.handlePausedStatus();
+                break;
+            case status.RESTARTED:
+                this.handleRestartedStatus();
+                break;
+            default:
+                console.error('Invalid status');
+        }
+    }
+
+    // handle status
+        // shift status (upon GameButton click)
+        // avoid repeated rendering of reset and pause status
+    handleRunningStatus() {
         this.statusCounter = 0;
-        if (this.currentStatus === status.PAUSED && this.statusCounter < 1) {
-            this.board.renderBoard(this.statusFunctions[this.currentStatus]());
-        } else if (this.currentStatus === status.RESTARTED && this.statusCounter < 1) {
+        this.state.update();
+    }
+
+    handlePausedStatus() {
+        if(this.statusCounter < 1) {
             this.statusCounter++;
-            this.board.renderBoard(this.statusFunctions[this.currentStatus]());
-            this.setStatus(status.RUNNING);
-        } else if (this.currentStatus === status.RUNNING) {
-            this.statusCounter = 0;
-            this.board.renderBoard(this.statusFunctions[this.currentStatus]());
+            this.updateStatus(status.PAUSED);
+        }
+    }
+
+    handleRestartedStatus() {
+        if(this.statusCounter < 1) {
+            this.statusCounter++;
+            this.state = new State(new Board(this.grid));
+            this.updateStatus(status.RUNNING);
         }
     }
 
 
-
-
-    // ----------------- Game -----------------
-
-    pauseGame() {
-        this.setStatus(status.PAUSED);
-        this.state.snake.initMoveListener(); // Reinitialize the move listener
-    }
-
-    restartGame() {
-        this.setStatus(status.RESTARTED);
-        this.state.snake.initMoveListener(); // Reinitialize the move listener
-    }
-
-    setStatus(newStatus) {
-        this.currentStatus = newStatus;
-        this.startGameRendering();
-    }
 
 
     // -----------------  Debug -----------------
@@ -112,7 +129,6 @@ export class SnakeGame {
         console.log("     direction: ", this.state.snake.direction);
 
         console.log("  - Food: ", this.state.food);
-
     }
 
 }
