@@ -77,7 +77,6 @@ export class Grid {
         return block;
     }
 
-
     // ----------------- Helpers -----------------
     updateBlockGrid(block) {
         this.blockGrid[block.x][block.y] = block;
