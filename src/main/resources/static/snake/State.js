@@ -25,7 +25,6 @@ export class State {
         }
     }
 
-
     // ------ snake movement logic -----
 
     isFoodEaten() {

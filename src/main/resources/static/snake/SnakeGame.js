@@ -27,7 +27,6 @@ export class SnakeGame {
         this.debugLogger();
     }
 
-
     // ----------------- init -----------------
     initBoardAndState() {
         this.grid = new Grid();
@@ -59,7 +58,6 @@ export class SnakeGame {
         this.currentStatus = newStatus;
         this.startGameRendering();
     }
-
 
     // ----------------- Rendering -----------------
 
