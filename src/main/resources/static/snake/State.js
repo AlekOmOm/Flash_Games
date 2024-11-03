@@ -13,8 +13,6 @@ export class State {
     update() {
         let [x,y] = this.snake.updatePos(this.grid);
 
-
-
         let isFoodEaten = this.isFoodEaten();
         if (isFoodEaten) {
             this.food = this.grid.getRandomBlock();
@@ -33,7 +31,6 @@ export class State {
     isFoodEaten() {
         return
     }
-
 
     isXOrYHit(x, y) {
         const index = this.snake.body.findIndex((part) => {
