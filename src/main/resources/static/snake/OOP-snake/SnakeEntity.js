@@ -1,5 +1,5 @@
-import {processUserInput} from "../UserInput.js";
-import {Grid} from "./Grid.js";
+import {processUserInput} from "../../UserInput.js";
+import {Grid, Block} from "./Grid.js";
 
 const DIRECTION_KEY_MAPPING = {
     "ArrowUp": 1,
@@ -13,45 +13,49 @@ const DIRECTION_KEY_MAPPING = {
 };
 
 // ----------------- main operations -----------------
+let [x,y] = [0,0];
 
 export class SnakeEntity {
 
-    constructor(block) {
+    constructor(grid) {
+        this.grid = grid;
         this.direction = 0;
-        this.body = [block];
+        this.body = Array(1).fill(() => new Block(0,0));
+        this.body[0] = this.grid.getRandomBlock();
+
+        console.log("Snake body: ", this.toStringSnake());
         this.initMoveListener();
         this.actions = new Map([
-            [1, (grid) => this.getBlockAbove(grid)], // up  y-=
-            [2, (grid) => this.getBlockRight(grid)], // right   x+=
-            [3, (grid) => this.getBlockDown(grid)], // down    y+=
-            [4, (grid) => this.getBlockLeft(grid)] // left     x-=
+            [1, this.getBlockAbove.bind(this)], // up  y-=
+            [2, this.getBlockRight.bind(this)], // right   x+=
+            [3, this.getBlockDown.bind(this)], // down    y+=
+            [4, this.getBlockLeft.bind(this)] // left     x-=
         ]);
     }
 
     // ----------------- Action Functions -----------------
-    getBlockAbove(grid) {
-        let [x,y] = [ this.body[0].x, this.body[0].y - 1 ];
-        this.move(grid, x, y);
+    getBlockAbove() {
+        [x,y] = [ this.body[0].x, this.body[0].y - 1 ];
+        return this.move();
     }
-    getBlockRight(grid) {
-        let [x,y] = [ this.body[0].x + 1, this.body[0].y ];
-        this.move(grid, x, y);
+    getBlockRight() {
+        [x,y] = [ this.body[0].x + 1, this.body[0].y ];
+        return this.move();
     }
-    getBlockDown(grid) {
-        let [x,y] = [ this.body[0].x, this.body[0].y + 1];
-        this.move(grid, x, y);
+    getBlockDown() {
+        [x,y] = [ this.body[0].x, this.body[0].y + 1];
+        return this.move();
     }
-    getBlockLeft(grid) {
-        let [x,y] = [ this.body[0].x - 1, this.body[0].y ];
-        this.move(grid, x, y);
+    getBlockLeft() {
+        [x,y] = [ this.body[0].x - 1, this.body[0].y ];
+        return this.move();
     }
 
     // ----------------- updates -----------------
-    updatePos(grid) {
+    updatePos() {
         let action = this.actions.get(this.direction);
-
         if (action) {
-            action(grid);
+            action();
         }
     }
 
@@ -68,17 +72,20 @@ export class SnakeEntity {
         });
     }
 
-    move(grid, x, y) {
-        let newBlock = grid.getSpecificBlock([x, y]);
-        if (newBlock != null) {
-            this.setNewHead(newBlock);
-            return
+    move() {
+        let newBlock = this.grid.getSpecificBlock([x, y]);
+        console.log("newblock:"+newBlock);
+
+        if (newBlock == null) {
+            return null;
         }
-        return [x,y];
+
+        this.setNewHead(newBlock);
     }
 
     setNewHead(block){
         this.body.unshift(block);
+        console.log("Snake body: ", this.toStringSnake());
     }
 
     // ----------------- Direction -----------------
@@ -105,8 +112,8 @@ export class SnakeEntity {
     // --- helper methods ---
     toStringSnake() {
         let str = "";
-        for (let i = 0; i < this.body.length; i++) {
-            str += "(" + this.body[i][0] + "," + this.body[i][1] + ")";
+        for (let block of this.body) {
+            str += block.toString();
         }
         return str;
     }

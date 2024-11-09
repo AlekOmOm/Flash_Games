@@ -1,17 +1,19 @@
 import {SnakeEntity} from "./SnakeEntity.js";
-import {Grid, Grid_Consts} from "./Grid.js";
+import {Block, Grid, Grid_Consts} from "./Grid.js";
 
 export class State {
 
     constructor(board) {
         this.grid = new Grid(); // TODO: update state to utilize and manage grid instance
-        this.snake = new SnakeEntity(this.grid.getRandomBlock());
+        this.snake = new SnakeEntity(this.grid);
+        console.log("snake: ", this.snake);
         this.food = this.grid.getRandomBlock();
+        console.log("food: ", this.food);
         this.board = board;
     }
 
     update() {
-        let [x,y] = this.snake.updatePos(this.grid);
+        this.snake.updatePos();
 
         let isFoodEaten = this.isFoodEaten();
         if (isFoodEaten) {
@@ -44,10 +46,18 @@ export class State {
     }
 
     hasCollidedWithWall() {
-        const head = this.snake.body[0];
+
+        let head = new Block(0,0);
+        head = this.snake.body[0];
+
+        if (head === undefined) {
+            console.log("head is undefined");
+            return false;
+        }
+
         // Check if the snake is out of bounds
-        if (head[0].y < 0 || head[0].x > Grid_Consts.CANVAS_WIDTH ||
-            head[1] < 0 || head[1] >= Grid_Consts.CANVAS_HEIGHT) {
+        if (head.x < 0 || head.x > Grid_Consts.CANVAS_WIDTH ||
+            head.y < 0 || head.y >= Grid_Consts.CANVAS_HEIGHT) {
             this.gameOver("Game over! You collided with the wall!");
             return true;
         }

@@ -1,6 +1,6 @@
 import { Board } from './Board.js';
 import { State } from './State.js';
-import { Grid } from './Grid.js';
+import { Grid, Grid_Consts} from './Grid.js';
 
 
 
@@ -29,16 +29,15 @@ export class SnakeGame {
 
     // ----------------- init -----------------
     initBoardAndState() {
-        this.grid = new Grid();
-        this.board = new Board(this.grid);
+        this.board = new Board();
         this.state = new State(this.board);
     }
 
     initStatusFunctions() {
         this.statusFunctions = {
-            [status.RUNNING]: this.getRunningState.bind(this),
-            [status.PAUSED]: this.getIdleState.bind(this),
-            [status.RESTARTED]: this.getResetState.bind(this)
+            [status.RUNNING]: this.getRunningState,
+            [status.PAUSED]: this.getIdleState,
+            [status.RESTARTED]: this.getResetState
         };
     }
 
@@ -118,15 +117,13 @@ export class SnakeGame {
         // set pause status, and then print board, snake and food positions
 
         console.log("1. Board: ");
-        console.log(" grid: (height", this.board.grid.BOARD_HEIGHT + ", width", this.board.grid.BOARD_WIDTH + ", blocksize", this.board.grid.BLOCKSIZE + ")");
-
         console.log("2. State: ", this.state);
+        console.log("  - grid: (height", Grid_Consts.BOARD_HEIGHT + ", width", Grid_Consts.BOARD_WIDTH + ", blocksize", Grid_Consts.BLOCK_SIZE + ")");
 
         console.log("  - Snake: ", this.state.snake);
-        console.log("     body: ", this.state.snake.body);
+        console.log("     body: ", this.state.snake.toStringSnake());
         console.log("     direction: ", this.state.snake.direction);
 
         console.log("  - Food: ", this.state.food);
     }
-
 }

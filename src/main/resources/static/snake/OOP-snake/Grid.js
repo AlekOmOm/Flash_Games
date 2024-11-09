@@ -7,7 +7,7 @@ export const Grid_Consts = {
     CANVAS_WIDTH: 35*20
 }
 
-class Block {
+export class Block {
     Status = {
         OCCUPIED: true,
         AVAILABLE: false
@@ -30,11 +30,16 @@ class Block {
     setAsAvailable() {
         this.status = this.Status.AVAILABLE;
     }
+
+    toString() {
+        return "Block { x="+this.x+", y="+this.y+" }"
+    }
 }
 
 export class Grid {
     constructor() {
         this.initBlockGrid();
+        console.log("block grid: ", this.blockGrid.length, this.blockGrid[0].length);
     }
 
     initBlockGrid() {
@@ -47,8 +52,10 @@ export class Grid {
     getRandomBlock() {
         let block = null;
         do {
-            block = this.getBlock(this.generateRandomPosition());
-        } while(!this.isAvailable(block) || block === null);
+            block = this.getSpecificBlock(this.generateRandomPosition());
+        } while(block === null);
+
+        console.log("random block: ", block);
 
         return this.useBlock(block);
     }
@@ -74,6 +81,7 @@ export class Grid {
     useBlock(block) {
         block.setAsOccupied();
         this.updateBlockGrid(block);
+        console.log("block used: ", block);
         return block;
     }
 
@@ -85,6 +93,7 @@ export class Grid {
     generateRandomPosition() {
         const x = Math.floor(Math.random() * Grid_Consts.BOARD_WIDTH); // 0-34
         const y = Math.floor(Math.random() * Grid_Consts.BOARD_HEIGHT); // 0-34
+        console.log("random position: ", x, y);
         return [x, y];
     }
 

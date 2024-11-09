@@ -23,8 +23,7 @@ export class Graphics {
 
 export class Board {
 
-    constructor(grid) {
-        this.grid = grid;
+    constructor() {
         this.initializeBoard();
     }
 
