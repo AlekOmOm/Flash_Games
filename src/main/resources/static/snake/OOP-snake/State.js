@@ -3,13 +3,12 @@ import {Block, Grid, Grid_Consts} from "./Grid.js";
 
 export class State {
 
-    constructor(board) {
+    constructor() {
         this.grid = new Grid(); // TODO: update state to utilize and manage grid instance
         this.snake = new SnakeEntity(this.grid);
         console.log("snake: ", this.snake);
         this.food = this.grid.getRandomBlock();
         console.log("food: ", this.food);
-        this.board = board;
     }
 
     update() {
@@ -46,7 +45,6 @@ export class State {
     }
 
     hasCollidedWithWall() {
-
         let head = new Block(0,0);
         head = this.snake.body[0];
 
@@ -89,7 +87,7 @@ export class State {
 
         alert(message);
 
-        console.log(`game over, snake position: (${this.snake.body[0][0]}, ${this.snake.body[0][1]}), board: (${this.board.width}, ${this.board.height})`);
+        console.log(`game over, snake position: (${this.snake.body[0].x}, ${this.snake.body[0].y}), grid: (${Grid_Consts.CANVAS_WIDTH}, ${Grid_Consts.CANVAS_HEIGHT})`);
         return false;
     }
 }

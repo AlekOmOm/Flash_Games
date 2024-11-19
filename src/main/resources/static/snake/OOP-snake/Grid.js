@@ -39,7 +39,13 @@ export class Block {
 export class Grid {
     constructor() {
         this.initBlockGrid();
-        console.log("block grid: ", this.blockGrid.length, this.blockGrid[0].length);
+        console.log("Grid Constructor");
+        console.log(" block grid: ", this.blockGrid.length, this.blockGrid[0].length);
+        console.log(" random block: ");
+        let head = this.getRandomBlock();
+        console.log("  - x: ", head.x);
+        console.log("  - y: ", head.y);
+        console.log("");
     }
 
     initBlockGrid() {

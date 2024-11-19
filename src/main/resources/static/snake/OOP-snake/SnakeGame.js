@@ -21,7 +21,6 @@ export class SnakeGame {
 
     constructor() {
         this.initBoardAndState();
-        this.initStatusFunctions();
         this.currentStatus = status.RUNNING;
         this.startGameRendering();
         this.debugLogger();
@@ -30,15 +29,7 @@ export class SnakeGame {
     // ----------------- init -----------------
     initBoardAndState() {
         this.board = new Board();
-        this.state = new State(this.board);
-    }
-
-    initStatusFunctions() {
-        this.statusFunctions = {
-            [status.RUNNING]: this.getRunningState,
-            [status.PAUSED]: this.getIdleState,
-            [status.RESTARTED]: this.getResetState
-        };
+        this.state = new State();
     }
 
     // ----------------- Game Status -----------------
@@ -64,7 +55,7 @@ export class SnakeGame {
         if (this.renderInterval) {
             clearInterval(this.renderInterval);
         }
-        // this.renderInterval = setInterval(this.render.bind(this), STATE_UPDATE_RATE);
+        this.renderInterval = setInterval(this.render.bind(this), STATE_UPDATE_RATE);
         this.render();
     }
 
